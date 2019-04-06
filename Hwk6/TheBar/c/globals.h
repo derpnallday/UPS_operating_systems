@@ -11,14 +11,14 @@
 int num_threads;	// number of customer threads
 int now_serving;	// customer's ID who is being served
 
-//TODO - declare some semaphores
-sem_t* bar_custWait = sem_open(0);
-sem_t* bar_orderWait = sem_open(0);
-sem_t* bar_custPay = sem_open(0);
-
-
-
-
-
+// declare some semaphores
+sem_t* travel; 		//customer travel time
+sem_t* cust_here; 	//customer arrives
+sem_t* bar_empty; 	//customer check if bar is occupied
+sem_t* cust_order; 	//customer places order
+sem_t* browse; 		//customer browse art gallery
+sem_t* make_drink; 	//bartender makes drink
+sem_t* at_register; //customer at register
+sem_t* payment;		 //customer pays bartender
 
 #endif /* GLOBALS_H_ */
