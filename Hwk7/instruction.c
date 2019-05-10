@@ -1,5 +1,6 @@
 #include "vmm.h"
 
+//read in instrucions from file
 void instruction_file(){
 	// get cwd
 	char cwd[1024];
@@ -29,6 +30,7 @@ void instruction_file(){
 	}
 }
 
+//parse file line
 void parse_file(char *line){
 	char op;
 	uint addr;
@@ -62,19 +64,13 @@ void parse_file(char *line){
   	}
   	//print ops
   	else if (op == PRINT_FRAME_TABLE || op == PRINT_PAGE_TABLE) {
-  		//printOps(op);
+  		printOps(op);
   	}
-  	
-  	printf("-------------\n\n");
-  	printOps('F');
-  		printf("\n");
-  	printOps('P');
-  	printf("-------------\n\n");
-  	
+  	  	
 }
 
 uint handle_address(char *addr){
-	//convert addrbinto numeric
+	//convert addr to numeric
 	uint num = (uint) strtol(addr,NULL, 16);
 	return num;
 }

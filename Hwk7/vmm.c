@@ -21,9 +21,6 @@ void readWrite(char op, uint v_addr){
 		// get page num
 	page_num = v_addr >> LOG2_BLKSIZE;
 
-
-	printf("page_num  from v_addr ------ %u\n", page_num);
-
 		//pte bit num
 	uint offset = v_addr << (32-(LOG2_BLKSIZE));
 	offset >>= (32-(LOG2_BLKSIZE));
@@ -32,8 +29,6 @@ void readWrite(char op, uint v_addr){
 		// pg does not exist
 	if (!(page_num >= 0 && page_num < PAGES)){
 		segfault = 1;
-
-		printf("segfault\n");
 	} 
 
 		// check valid bit
@@ -50,7 +45,7 @@ void readWrite(char op, uint v_addr){
 			age_table();
 		}
 
-
+		//set current process to cold and update clock hand
 		if(R_POLICY == CLOCK){
 			;
 			uint r=0;
@@ -58,9 +53,6 @@ void readWrite(char op, uint v_addr){
 			r = (pagetable[page_num] & bitMask(29,29));
 			pagetable[page_num] = r^pagetable[page_num];
 			update_hand();
-			printf("hand:  %d\n" ,hand);
-
-
 		}
 	} 
 		// valid bit invalid
@@ -131,7 +123,7 @@ void readWrite(char op, uint v_addr){
 				} 
 			}
 
-			// if full
+			// if not in table
 			if (!frame_found){
 				// pagefault
 				pagefault = 1;
@@ -163,17 +155,17 @@ void readWrite(char op, uint v_addr){
 					break;
 
 					case FIFO:
-						//trhow out head
+					//trhow out head
 					pg_evict_ind = FQueue->head->pg;
 					fr_evict_ind = pagetable[pg_evict_ind] & bitMask(0,28);
-						//reorder queue
+					//reorder queue
 					dequeue(FQueue);
 					enqueue(page_num, FQueue);
 					isEvictable = true;
 					break;
 
 					case LRU:
-						//oldest entry
+					//oldest entry
 					pg_evict_ind = get_oldest();
 					fr_evict_ind = pagetable[pg_evict_ind] & bitMask(0,28);
 					break;
@@ -199,7 +191,7 @@ void readWrite(char op, uint v_addr){
 				//evict the page
 				pagetable[pg_evict_ind] = 0x0000000;
 
-				//update table bits
+				//table with ops
 				if (op == WRITE)
 					pagetable[page_num] = 0xE0000000;
 				else if (op == READ)
@@ -271,7 +263,7 @@ void readWrite(char op, uint v_addr){
 					printf("1,-\n");
 				}
 			}
-
+			printf("\n");
 		}
 	}
 
@@ -318,10 +310,10 @@ void readWrite(char op, uint v_addr){
 
 		// indicate end of op
 		if (op == READ){
-			printf("END_READ\n");
+			printf("END_READ\n\n");
 		}
 		else if (op == WRITE){
-			printf("END_WRITE\n");
+			printf("END_WRITE\n\n");
 		}
 	}
 
@@ -333,6 +325,7 @@ void readWrite(char op, uint v_addr){
 		}
 	}
 
+	//grab oldest process for LRU
 	int get_oldest(){
 		int p = -1;
 		int c = -1;
@@ -347,6 +340,7 @@ void readWrite(char op, uint v_addr){
 
 	}
 
+	//check ages of processes
 	void print_ages(){
 		printf("ages :");
 		for (int i=0; i<FRAMES; i++){
@@ -356,9 +350,19 @@ void readWrite(char op, uint v_addr){
 	}
 
 
+void showbits(uint x){
+    int i; 
+    printf("\t\tbin: ");
+    for(i=(sizeof(int)*8)-1; i>=0; i--){
+        (x&(1u<<i))?putchar('1'):putchar('0');
+    }
+	printf("\n");
+}
+
+	//addr conversion to hex and dec
 	void convert_addr(uint addr){
-		printf("\t\thex: 0x%.8X\n",addr); // printing hex
-		printf("\t\tdec: %i\n",addr); // printing in decimal
+		printf("\t\thex: 0x%.8X\n",addr); 
+		printf("\t\tdec: %i\n",addr); 
 		showbits(addr);
 		printf("\n");
 	}
@@ -376,6 +380,7 @@ void readWrite(char op, uint v_addr){
 		return (addr) >> 31;
 	}
 
+	//change clock hand
 	void update_hand(){
 		hand++;
 		if (hand >= FRAMES){
@@ -383,6 +388,7 @@ void readWrite(char op, uint v_addr){
 		}
 	}
 
+//get page num from frame
 uint frame_to_page(uint frame_addr){
 		return ((frametable[frame_addr] << 1) >> 1);
 }

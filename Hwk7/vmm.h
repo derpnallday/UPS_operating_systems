@@ -78,14 +78,14 @@ char chooseOp(char *op);
 uint handle_address(char *addr);
 
 
-// amounts
+// global counts
 double instruction_count;
 double read_rate;
 double write_rate;
 double replace_rate;
 double pagefault_rate;
 
-//for queue.c
+//for queue
 #define	EMPTY NULL	
 #define TRUE 1
 #define FALSE 0
@@ -119,6 +119,3 @@ uint	getlast(struct queue *q);
 uint	dequeue(struct queue *q);
 uint 	enqueue(uint pg, struct queue *q);
 struct queue *newqueue();
-
-uint bitMask(uint a, uint b);
-uint removePage(uint pg, struct queue *q);

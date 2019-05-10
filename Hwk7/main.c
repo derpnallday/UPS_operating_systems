@@ -4,6 +4,7 @@ int main(int argc, char *argv[]){
 
 	if (argc == 1){
 		printf("enter input in format: [-p num_pages] [-f num_frames] [-b block_size] [-r rep_policy] <inst_file>\n");
+		printf("available policies are [-r random] [-f fifo] [-l lru] [-c clock]\n");
 		//return 0;
 	}
 
@@ -47,7 +48,7 @@ int main(int argc, char *argv[]){
 
 	instruction_file();
 
-	printf("inst_count=%.0f ",instruction_count);
+	printf("\ninst_count=%.0f ",instruction_count);
 	printf("(read=%.2f%%, write=%.2f%%), ", (read_rate/instruction_count)*100, (write_rate/instruction_count)*100);
 	printf("page_faults=%.0f (%.2f%%), replacements=%.0f (%.2f%%)\n", pagefault_rate, (((pagefault_rate)/instruction_count)*100), replace_rate, ((replace_rate/instruction_count)*100));
 
