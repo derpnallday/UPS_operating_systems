@@ -5,7 +5,7 @@ int main(int argc, char *argv[]){
 	if (argc == 1){
 		printf("enter input in format: [-p num_pages] [-f num_frames] [-b block_size] [-r rep_policy] <inst_file>\n");
 		printf("available policies are [-r random] [-f fifo] [-l lru] [-c clock]\n");
-		//return 0;
+		return 0;
 	}
 
 	instruction_count = 0;

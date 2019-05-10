@@ -117,7 +117,6 @@ void readWrite(char op, uint v_addr){
 						update_hand();
 						break;
 					}
-
 					// break from loop
 					break;
 				} 
